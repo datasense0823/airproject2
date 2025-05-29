@@ -1,4 +1,4 @@
-# 🧠 AI Project Challenge 2: Human-in-the-Loop Document Summarizer
+# Data Sense Presents: AI Project Challenge 2: Human-in-the-Loop Document Summarizer
 
 ## 🎯 Objective
 
@@ -25,9 +25,7 @@ Use the file `investment_strategy.pdf` as your source document. It contains appr
 You must parse and summarize this document.
 
 
----
-
-## 🧪 Scoring Logic
+## Scoring Logic
 
 Each summary must be evaluated and scored before being shown to the human.
 
@@ -44,42 +42,16 @@ Each summary must be evaluated and scored before being shown to the human.
 - `flagged_uncertain`: Set to `TRUE` if summary includes vague words like `"maybe"`, `"probably"`, `"I think"`.
 - `flagged_too_short`: Set to `TRUE` if summary has less than 25 words.
 
----
 
-## 👩‍⚖️ Human Review Process
+## AFTER LLM CALL, USER SHOULD BE PROMPTED BELOW QUESTION
 
-After generating and scoring the summary:
-
-### ✅ If approved:
-
-
-## 👩‍⚖️ Human Review Process
-
-After generating and scoring the summary:
-
-### ✅ If approved:
-
-Do you approve the following summary? (Type 'approve' or 'reject')
+**Do you approve the following summary? (Type 'approve' or 'reject')**
 
 Summary:
 "<Generated summary here>"
 
-shell
-Copy
-Edit
+### ✅ If approved: Store Information in a Postrges SQL Table
 
-### ❌ If rejected:
-
-Please describe what needs improvement in the summary:
-(e.g., "It missed the importance of tax efficiency and portfolio rebalancing.")
-
-pgsql
-Copy
-Edit
-
-Your feedback will be used to regenerate the summary.
-
----
 
 ## 🗃️ PostgreSQL Table Schema
 
@@ -97,10 +69,18 @@ CREATE TABLE approved_summaries (
     feedback TEXT,
     approved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-Table 2: rejected_summaries
-sql
-Copy
-Edit
+
+
+##  ❌ If rejected: Ask for a Question and Store Rejected summaries in POSTGRES Table
+
+Please describe what needs improvement in the summary:
+(e.g., "It missed the importance of tax efficiency and portfolio rebalancing.")
+
+
+Your feedback will be used to regenerate the summary.
+
+**Table 2: rejected_summaries**
+
 CREATE TABLE rejected_summaries (
     id UUID PRIMARY KEY,
     original_text TEXT NOT NULL,
@@ -112,47 +92,18 @@ CREATE TABLE rejected_summaries (
     rejected_by TEXT NOT NULL,
     rejected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-✅ Deliverables
-investment_strategy.docx: Your input document
 
-main.py: Full summarization + review pipeline
+#  Deliverables
+1. investment_strategy.docx: Your input document
+2. main.py: Full summarization + review pipeline
+3. score_logic.py: Summary scoring and flag checker
+4. schema.sql: SQL for both PostgreSQL tables
+5. Snapshot of Table Storage
+6. A Short video showing the whole Process
+7. README.md: This file
 
-score_logic.py: Summary scoring and flag checker
 
-schema.sql: SQL for both PostgreSQL tables
-
-.env: Contains OPENAI_API_KEY, POSTGRES_URL
-
-README.md: This file
-
-🛠 Suggested Tools
-Python 3.10+
-
-OpenAI or Claude API
-
-PostgreSQL
-
-psycopg2 or asyncpg
-
-uuid, datetime, dotenv
-
-💡 Bonus Points
-Store human feedback in the DB
-
-Allow up to 2 rejection-regeneration cycles
-
-Show top 3 summaries with highest scores
-
-🧠 Real-World Relevance
-This project simulates:
-
-Editorial review pipelines
-
-Human-in-the-loop GenAI systems
-
-Enterprise content validation
-
-RAG-based summarization + moderation flow
+# Deadline for Submission: Sunday June 7 EOD
 
 
 
