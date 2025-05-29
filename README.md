@@ -42,22 +42,21 @@ Each summary must be evaluated and scored before being shown to the human.
 - `flagged_uncertain`: Set to `TRUE` if summary includes vague words like `"maybe"`, `"probably"`, `"I think"`.
 - `flagged_too_short`: Set to `TRUE` if summary has less than 25 words.
 
+## ✅ Human Review Prompt
 
-## AFTER LLM CALL, USER SHOULD BE PROMPTED BELOW QUESTION
+After the LLM generates and scores the summary, the user should be shown the following prompt:
 
-**Do you approve the following summary? (Type 'approve' or 'reject')**
+```text
+Do you approve the following summary? (Type 'approve' or 'reject')
 
 Summary:
 "<Generated summary here>"
 
-### ✅ If approved: Store Information in a Postrges SQL Table
+🟢 If Approved
+The summary, along with its metadata, should be stored in a PostgreSQL table named approved_summaries.
 
+🗃️ PostgreSQL Table Schema — approved_summaries
 
-## 🗃️ PostgreSQL Table Schema
-
-### Table 1: `approved_summaries`
-
-```sql
 CREATE TABLE approved_summaries (
     id UUID PRIMARY KEY,
     original_text TEXT NOT NULL,
@@ -70,16 +69,16 @@ CREATE TABLE approved_summaries (
     approved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
-##  ❌ If rejected: Ask for a Question and Store Rejected summaries in POSTGRES Table
+🔴 If Rejected
+Prompt the reviewer for feedback:
 
 Please describe what needs improvement in the summary:
 (e.g., "It missed the importance of tax efficiency and portfolio rebalancing.")
 
 
-Your feedback will be used to regenerate the summary.
+Store this feedback and the rejected summary in a separate PostgreSQL table called rejected_summaries.
 
-**Table 2: rejected_summaries**
+🗃️ PostgreSQL Table Schema — rejected_summaries
 
 CREATE TABLE rejected_summaries (
     id UUID PRIMARY KEY,
@@ -92,18 +91,27 @@ CREATE TABLE rejected_summaries (
     rejected_by TEXT NOT NULL,
     rejected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+Use the collected feedback to regenerate a better summary via the LLM.
 
-#  Deliverables
+
+📦 Deliverables
+
 1. investment_strategy.docx: Your input document
-2. main.py: Full summarization + review pipeline
-3. score_logic.py: Summary scoring and flag checker
-4. schema.sql: SQL for both PostgreSQL tables
-5. Snapshot of Table Storage
-6. A Short video showing the whole Process
-7. README.md: This file
 
+2. main.py: Full summarization + human review pipeline
 
-# Deadline for Submission: Sunday June 7 EOD
+3. score_logic.py: Summary scoring and flag checker logic
+
+4. schema.sql: SQL schema for both PostgreSQL tables
+
+5. Snapshot of table data stored in the database (approved & rejected)
+
+6. A short screen recording (1–2 minutes) showing the full flow
+
+7. README.md: This instruction file
+
+## 📅 Deadline for Submission
+## 🗓 Sunday, June 7 — End of Day (EOD)
 
 
 
