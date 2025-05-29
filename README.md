@@ -110,8 +110,8 @@ Use the collected feedback to regenerate a better summary via the LLM.
 
 7. README.md: This instruction file
 
-## 📅 Deadline for Submission
-## 🗓 Sunday, June 7 — End of Day (EOD)
+📅 Deadline for Submission
+🗓 Sunday, June 7 — End of Day (EOD)
 
 
 
